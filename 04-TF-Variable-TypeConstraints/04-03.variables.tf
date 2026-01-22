@@ -59,7 +59,7 @@ variable "vm_config" {
     version   = string
   })
   default = {
-    size      = "Standard_D2s_v5"   # RHEL needs more CPU/RAM
+    size      = "Standard_D2s_v3"   # RHEL needs more CPU/RAM
     publisher = "RedHat"
     offer     = "RHEL"
     sku       = "94_gen2"
