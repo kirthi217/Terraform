@@ -1,6 +1,6 @@
 # Best Practice:
 # The storage account must be pre-created.
-# Terraform should only reference it, not create it in this main.tf file configuration.
+# Terraform should only reference it, not create it in this 03-07.allResources.tf file configuration.
 ##by using shell script we will create storage account in another resource group
 
 #Terraform State File

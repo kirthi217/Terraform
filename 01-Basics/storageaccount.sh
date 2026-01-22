@@ -1,11 +1,11 @@
 #!/bin/bash
 
 RESOURCE_GROUP_NAME=learning-tf-rg
-STORAGE_ACCOUNT_NAME=azdevops$RANDOM
+STORAGE_ACCOUNT_NAME=azdevopsvenkat
 CONTAINER_NAME=tfstate
 
 # Create resource group
-az group create --name $RESOURCE_GROUP_NAME --location eastus
+az group create --name $RESOURCE_GROUP_NAME --location ukwest
 
 # Create storage account
 az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob

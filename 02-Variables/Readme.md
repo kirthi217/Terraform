@@ -41,14 +41,13 @@ while non-primitive types store collections or structured data.
 ==================Example for each variable ====================
 Terraform **Input Variable** _Precedence Order (lowest → highest)_:
         1.Defined in variable blocks
-                variable "region" {
-                default = "us-east-1"
+                variable "environment" {
+                default = "Dev"
                 }
-        
-        2.terraform.tfvars-----------------> region = "us-west-2"
-        3.Explicit -var-file flags --------> terraform apply -var-file="prod.tfvars"
-        4.Environment variables (TF_VAR_*) → export TF_VAR_region="ap-south-1"
-        5.Command-line -var flags (highest precedence) ---> terraform apply -var="region=ca-central-1"
+        2.terraform.tfvars-----------------> environment = "QA"
+        3.Explicit -var-file flags --------> terraform apply -var-file="terraform.tfvars"
+        4.Environment variables (TF_VAR_*) → export TF_VAR_environment="Stg"
+        5.Command-line -var flags (highest precedence) ---> terraform apply -var="environment=Prod"
 
 Terraform **output Variable**
         output "rg_name" {

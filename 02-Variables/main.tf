@@ -28,6 +28,12 @@ variable "environment" {
   description = "this is environment value"
   default = "Dev"
 }
+locals {
+  common_tags = {
+    environment = "dev"
+    lob = "Telocom"
+  }
+}
 
 resource "azurerm_resource_group" "rg" {
   name     = "learning-resources"
@@ -43,6 +49,8 @@ resource "azurerm_storage_account" "storage_account" {
   account_replication_type = "LRS"
 
   tags = {
-    environment = "Dev"
+    #environment = "Dev" ##1st time used this
+    environment= var.environment ## 2nd time used
+    environment = local.common_tags ##3rd time used
   }
 }
