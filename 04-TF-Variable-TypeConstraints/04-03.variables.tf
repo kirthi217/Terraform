@@ -47,7 +47,7 @@ variable "network_config" {
 variable "allowed_vm_sizes" {
   type        = list(string)
   description = "Allowed VM sizes"
-  default     = ["Standard_B1s", "Standard_DS2_v2", "Standard_DS3_v2"]
+  default     = ["Standard_DS2_v3", "Standard_DS2_v2", "Standard_DS3_v2"]
 }
 
 variable "vm_config" {
