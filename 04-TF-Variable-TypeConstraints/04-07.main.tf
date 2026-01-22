@@ -1,38 +1,42 @@
-resource "azurerm_resource_group" "example" {
+resource "azurerm_resource_group" "main" {
   name     = "${var.environment}-resources"
   location = var.allowed_locations[0]   # Picks "UK West"
 }
 
+# Virtual Network
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.environment}-network"
+  name                = "${var.environment}-vnet"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
   address_space       = [element(var.network_config, 0)]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
 }
 
+# Subnet
 resource "azurerm_subnet" "internal" {
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.example.name
+  resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = [element(var.network_config, 1)]
+  address_prefixes     = ["${element(var.network_config, 1)}/${element(var.network_config, 2)}"]
 }
 
+# Network Interface
 resource "azurerm_network_interface" "main" {
   name                = "${var.environment}-nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
 
   ip_configuration {
-    name                          = "internal"
+    name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
+# Virtual Machine
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.environment}-vm"
-  location              = azurerm_resource_group.example.location
-  resource_group_name   = azurerm_resource_group.example.name
+  location              = azurerm_resource_group.main.location
+  resource_group_name   = azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
   vm_size               = var.vm_config.size
 
@@ -46,7 +50,7 @@ resource "azurerm_virtual_machine" "main" {
   }
 
   storage_os_disk {
-    name              = "osdisk-${var.environment}"
+    name              = "${var.environment}-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -54,18 +58,14 @@ resource "azurerm_virtual_machine" "main" {
   }
 
   os_profile {
-    computer_name  = "hostname"
+    computer_name  = "${var.environment}-host"
     admin_username = "azureuser"
-    admin_password = "azureuser@123"
+    admin_password = "AzureUser@123"
   }
 
   os_profile_linux_config {
     disable_password_authentication = false
   }
 
-  tags = {
-    environment = var.resource_tags["environment"]
-    managed_by  = var.resource_tags["managed_by"]
-    department  = var.resource_tags["department"]
-  }
+  tags = var.resource_tags
 }
