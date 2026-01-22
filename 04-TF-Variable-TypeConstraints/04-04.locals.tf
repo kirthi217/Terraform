@@ -4,3 +4,6 @@ locals {
     lob         = "Telecom"
   }
 }
+locals {
+  location = var.allowed_locations[0]
+}
