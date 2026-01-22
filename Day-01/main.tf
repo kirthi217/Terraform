@@ -31,3 +31,5 @@ resource "azurerm_storage_account" "storage_account" {
 }
 ##if we need to configure Explicit dependency we pass dependency [] specifically on each resource .
 # depends_on = [ azurerm_resource_group.rg ]
+##if you delete/comment storage resource it will validate the state file whether resource is there or not if not it will be destroyed
+#and make it only resource group
