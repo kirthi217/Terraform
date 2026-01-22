@@ -18,7 +18,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "storage_account" {
-
+# depends_on = [ azurerm_resource_group.rg ]
   name                     = "azdevopsvenkat"
   resource_group_name      = azurerm_resource_group.rg.name  # implicit dependency
   location                 = azurerm_resource_group.rg.location # implicit dependency
@@ -29,3 +29,5 @@ resource "azurerm_storage_account" "storage_account" {
     environment = "Dev"
   }
 }
+##if we need to configure Explicit dependency we pass dependency [] specifically on each resource .
+# depends_on = [ azurerm_resource_group.rg ]
