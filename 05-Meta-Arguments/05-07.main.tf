@@ -63,7 +63,7 @@ resource "azurerm_storage_account" "static_storage" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  allow_blob_public_access = false
+  #allow_blob_public_access = false
   min_tls_version          = "TLS1_2"
 
   tags = {
@@ -83,7 +83,7 @@ resource "azurerm_storage_account" "dynamic_storage" {
   account_tier             = each.value.tier
   account_replication_type = each.value.replication_type
 
-  allow_blob_public_access = false
+  #allow_blob_public_access = false
   min_tls_version          = "TLS1_2"
 
   tags = {
