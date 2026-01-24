@@ -1,28 +1,42 @@
-# variable "environment" {
-#   type        = string
-#   description = "Environment name"
-#   default     = "Dev"
-# }
-# variable "allowed_locations" {
-#   type        = list(string)
-#   description = "Allowed Azure locations"
-#   default     = ["UK West", "North Europe", "East US"]
-# }
-#
-# variable "resource_group_name" {
-#   type        = string
-#   description = "Resource group name"
-#   default     = "learning-resources"
-# }
-#
-# #for Hard coding values
-# variable "storage_account_name" {
-#   type = string
-#   default = "azdevopsvenkat"
-# }
-#
-# # # For using dynamic
-# # variable "storage_account_name" {
-# #   type = list(string)
-# #   default = ["azdevopsvenkat", "azdevopsvenkat1", "azdevopsvenkat2"]
-# # }
+# =====================================================
+# Variables
+# =====================================================
+variable "environment" {
+  type    = string
+  default = "Dev"
+}
+
+variable "resource_group_name" {
+  type    = string
+  default = "learning-resources"
+}
+
+# ----- Static Storage Account Variable -----
+variable "static_storage_name" {
+  type    = string
+  default = "staticstoragevenkat434"
+}
+
+# ----- Dynamic Storage Accounts Variable -----
+variable "dynamic_storage_accounts" {
+  type = list(object({
+    name             : string
+    location         : string
+    tier             : string
+    replication_type : string
+  }))
+  default = [
+    {
+      name             = "dynamicazdevopsvenkat"
+      location         = "UK West"
+      tier             = "Standard"
+      replication_type = "LRS"
+    },
+    {
+      name             = "dynamicazdevopsvenkat1"
+      location         = "North Europe"
+      tier             = "Standard"
+      replication_type = "GRS"
+    }
+  ]
+}
