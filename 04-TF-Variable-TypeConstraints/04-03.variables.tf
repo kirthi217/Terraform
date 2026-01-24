@@ -32,7 +32,7 @@ variable "resource_tags" {
   type        = map(string)
   description = "Common resource tags"
   default = {
-    environment = "staging"
+    environment = "development"
     managed_by  = "terraform"
     department  = "devops"
   }
@@ -44,8 +44,9 @@ variable "network_config" {
   default     = ["10.0.0.0/16", "10.0.2.0", 24]
 }
 
+##SET data types  allows only unique values
 variable "allowed_vm_sizes" {
-  type        = list(string)
+  type        = list(string) ## We will use SET as well set(string)
   description = "Allowed VM sizes"
   default     = ["Standard_DS2_v3", "Standard_DS2_v2", "Standard_DS3_v2"]
 }

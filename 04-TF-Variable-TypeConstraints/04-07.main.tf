@@ -38,7 +38,7 @@ resource "azurerm_virtual_machine" "main" {
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size               = var.vm_config.size
+  vm_size               = var.vm_config.size ##if you pass var.allowed_vm_sizes[0] it select 0 element
 
   delete_os_disk_on_termination = var.is_delete
 
@@ -60,7 +60,7 @@ resource "azurerm_virtual_machine" "main" {
   os_profile {
     computer_name  = "${var.environment}-host"
     admin_username = "azureuser"
-    admin_password = "AzureUser@123"
+    admin_password = "azureuser@123"
   }
 
   os_profile_linux_config {
