@@ -42,7 +42,7 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: 'terraform'
-            commandOptions: '-out $(Build.SourcesDirectory)/tfplanfile'
+            commandOptions: '-out $(Build.SourcesDirectory)/terraform/tfplanfile'
             environmentServiceNameAzureRM: 'Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)'
         - task: ArchiveFiles@2
           displayName: Archive Terraform plan files
