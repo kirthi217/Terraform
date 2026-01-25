@@ -8,6 +8,10 @@ stages:
         pool:
          vmImage: ubuntu-latest
         steps:
+        - task: TerraformInstaller@0
+          displayName: Install Terraform CLI
+          inputs:
+            terraformVersion: '4.49'
         - task: TerraformTask@5
           displayName: Terraform Init
           inputs:
