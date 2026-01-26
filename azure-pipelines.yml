@@ -99,12 +99,12 @@ stages:
 # ================= Destroy Stage =================
 - stage: Destroy
   displayName: Terraform Destroy
-  dependsOn: Deploy       # Ensure it runs after Deploy
-  condition: always()  # Only run if previous stages succeeded
+  dependsOn: Deploy
+  condition: always()   # Runs even if Deploy failed
   jobs:
   - deployment: Destroy
     displayName: Destroy Azure Resources
-    environment: prod      # Requires manual approval
+    environment: prod  # Requires manual approval
     strategy:
       runOnce:
         deploy:
@@ -117,7 +117,7 @@ stages:
             inputs:
               terraformVersion: '1.3.10'
 
-          # Terraform Init (connect to the same remote backend)
+          # Terraform Init pointing to the same backend as deploy
           - task: TerraformTask@5
             displayName: Terraform Init for Destroy
             inputs:
@@ -127,8 +127,9 @@ stages:
               backendAzureRmStorageAccountName: azdevopsvenkat
               backendAzureRmContainerName: terraform
               backendAzureRmKey: terraform.tfstate
+              environmentServiceNameAzureRM: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
 
-          # Terraform Destroy
+          # Terraform Destroy (reads from state automatically)
           - task: TerraformTask@5
             displayName: Terraform Destroy
             inputs:
