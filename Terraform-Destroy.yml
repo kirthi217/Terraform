@@ -26,7 +26,7 @@ stages:
             inputs:
               source: 'specific'
               project: 'Azdevops-terraform'         # Your DevOps project name
-              pipeline: 'Terraform-Build'           # The Build pipeline NAME, NOT YAML file
+              pipeline: 'Terraform-Deploy'          # <-- Use the exact Build pipeline NAME
               buildVersionToDownload: 'latest'
               artifact: 'tfplan'
               targetPath: '$(Pipeline.Workspace)/tfplan'
@@ -37,7 +37,7 @@ stages:
             inputs:
               source: 'specific'
               project: 'Azdevops-terraform'
-              pipeline: 'Terraform-Build'
+              pipeline: 'Terraform-Deploy'
               buildVersionToDownload: 'latest'
               artifact: 'terraform-lock'
               targetPath: '$(Pipeline.Workspace)/terraform-lock'
