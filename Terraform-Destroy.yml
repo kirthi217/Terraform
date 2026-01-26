@@ -7,26 +7,46 @@ stages:
   jobs:
   - deployment: Destroy
     displayName: Destroy Azure Resources
-    environment: prod  # Requires approval
+    environment: prod  # Requires manual approval
     strategy:
       runOnce:
         deploy:
           steps:
           - checkout: self
 
+          # Install Terraform
           - task: TerraformInstaller@1
+            displayName: Install Terraform
             inputs:
               terraformVersion: '1.3.10'
 
-          # Download artifacts from Build
-          - download: current
-            artifact: tfplan
-          - download: current
-            artifact: terraform-lock
+          # Download Terraform plan artifact from Build pipeline
+          - task: DownloadPipelineArtifact@2
+            displayName: Download Terraform Plan
+            inputs:
+              source: 'specific'
+              project: 'Azdevops-terraform'         # Your project name
+              pipeline: 'azure-pipelines.yml'       # Build pipeline YAML or ID
+              buildVersionToDownload: 'latest'
+              artifact: 'tfplan'
+              targetPath: '$(Pipeline.Workspace)/tfplan'
 
+          # Download Terraform lock artifact
+          - task: DownloadPipelineArtifact@2
+            displayName: Download Terraform Lock
+            inputs:
+              source: 'specific'
+              project: 'Azdevops-terraform'
+              pipeline: 'azure-pipelines.yml'
+              buildVersionToDownload: 'latest'
+              artifact: 'terraform-lock'
+              targetPath: '$(Pipeline.Workspace)/terraform-lock'
+
+          # Copy lock file
           - script: cp $(Pipeline.Workspace)/terraform-lock/.terraform.lock.hcl ./
             displayName: Copy lock file
 
+          # Terraform Init
           - task: TerraformTask@5
             displayName: Terraform Init
             inputs:
@@ -37,6 +57,7 @@ stages:
               backendAzureRmContainerName: terraform
               backendAzureRmKey: terraform.tfstate
 
+          # Terraform Destroy
           - task: TerraformTask@5
             displayName: Terraform Destroy
             inputs:
