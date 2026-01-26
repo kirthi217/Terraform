@@ -1,0 +1,46 @@
+trigger: none
+pr: none
+
+stages:
+- stage: Destroy
+  displayName: Terraform Destroy
+  jobs:
+  - deployment: Destroy
+    displayName: Destroy Azure Resources
+    environment: prod  # Requires approval
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: '1.3.10'
+
+          # Download artifacts from Build
+          - download: current
+            artifact: tfplan
+          - download: current
+            artifact: terraform-lock
+
+          - script: cp $(Pipeline.Workspace)/terraform-lock/.terraform.lock.hcl ./
+            displayName: Copy lock file
+
+          - task: TerraformTask@5
+            displayName: Terraform Init
+            inputs:
+              provider: azurerm
+              command: init
+              backendServiceArm: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
+              backendAzureRmStorageAccountName: azdevopsvenkat
+              backendAzureRmContainerName: terraform
+              backendAzureRmKey: terraform.tfstate
+
+          - task: TerraformTask@5
+            displayName: Terraform Destroy
+            inputs:
+              provider: azurerm
+              command: destroy
+              commandOptions: '-auto-approve'
+              environmentServiceNameAzureRM: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
