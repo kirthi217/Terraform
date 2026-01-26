@@ -20,33 +20,11 @@ stages:
             inputs:
               terraformVersion: '1.3.10'
 
-          # Download Terraform plan artifact from Build pipeline
-          - task: DownloadPipelineArtifact@2
-            displayName: Download Terraform Plan
-            inputs:
-              source: 'specific'
-              project: 'Azdevops-terraform'         # Your DevOps project name
-              pipeline: 'Terraform-Deploy'          # <-- Use the exact Build pipeline NAME
-              buildVersionToDownload: 'latest'
-              artifact: 'tfplan'
-              targetPath: '$(Pipeline.Workspace)/tfplan'
+          # Copy terraform configuration files from repo
+          - script: echo "Using Terraform configuration from repo"
+            displayName: Info
 
-          # Download Terraform lock artifact from Build pipeline
-          - task: DownloadPipelineArtifact@2
-            displayName: Download Terraform Lock
-            inputs:
-              source: 'specific'
-              project: 'Azdevops-terraform'
-              pipeline: 'Terraform-Deploy'
-              buildVersionToDownload: 'latest'
-              artifact: 'terraform-lock'
-              targetPath: '$(Pipeline.Workspace)/terraform-lock'
-
-          # Copy lock file to current working directory
-          - script: cp $(Pipeline.Workspace)/terraform-lock/.terraform.lock.hcl ./
-            displayName: Copy lock file
-
-          # Terraform Init
+          # Terraform Init (backend points to Azure Storage)
           - task: TerraformTask@5
             displayName: Terraform Init
             inputs:
@@ -57,7 +35,7 @@ stages:
               backendAzureRmContainerName: terraform
               backendAzureRmKey: terraform.tfstate
 
-          # Terraform Destroy
+          # Terraform Destroy (uses current state in backend)
           - task: TerraformTask@5
             displayName: Terraform Destroy
             inputs:
