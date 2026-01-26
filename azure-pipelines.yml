@@ -59,33 +59,28 @@ stages:
         #     publishLocation: 'Container'
         - publish: tfplan
           artifact: tfplan
+        - download: current
+          artifact: tfplan
+        - download: current
+          artifact: terraform-lock
+        - script: cp $(Pipeline.Workspace)/terraform-lock/.terraform.lock.hcl ./
+          displayName: Copy lock file
 
-  - stage: Release
-    dependsOn: Build
-    jobs:
-    - deployment: Apply
-      environment: prod
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - checkout: self
+        - task: TerraformTask@5
+          displayName: Terraform Init
+          inputs:
+            provider: azurerm
+            command: init
+            backendServiceArm: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
+            backendAzureRmStorageAccountName: azdevopsvenkat
+            backendAzureRmContainerName: terraform
+            backendAzureRmKey: terraform.tfstate
 
-            - task: TerraformInstaller@1
-              inputs:
-                terraformVersion: '1.3.10'
-
-            - download: current
-              artifact: tfplan
-
-            - script: ls -R $(Pipeline.Workspace)/tfplan
-              displayName: List tfplan
-
-            - task: TerraformTask@5
-              displayName: Terraform Apply
-              inputs:
-                provider: azurerm
-                command: apply
-                commandOptions: '$(Pipeline.Workspace)/tfplan/tfplan'
-                environmentServiceNameAzureRM: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
+        - task: TerraformTask@5
+          displayName: Terraform Apply
+          inputs:
+            provider: azurerm
+            command: apply
+            commandOptions: 'tfplan'
+            environmentServiceNameAzureRM: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
 
