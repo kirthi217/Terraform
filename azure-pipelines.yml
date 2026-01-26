@@ -128,8 +128,14 @@ stages:
               backendAzureRmContainerName: terraform
               backendAzureRmKey: terraform.tfstate
               environmentServiceNameAzureRM: Billing-Subscription(af504235-2f6d-4469-aa25-251f498730fc)
+              ensureBackend: true   # <-- Ensure Terraform connects to the backend
 
-          # Terraform Destroy (reads from state automatically)
+          # Select default workspace (create if missing)
+          - script: |
+              terraform workspace select default || terraform workspace new default
+            displayName: Select Terraform Workspace
+
+          # Terraform Destroy (reads state from backend)
           - task: TerraformTask@5
             displayName: Terraform Destroy
             inputs:
