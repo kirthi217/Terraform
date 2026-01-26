@@ -132,7 +132,7 @@ stages:
 
           # Select default workspace (create if missing)
           - script: |
-              terraform workspace select default || terraform workspace new default
+              terraform workspace select prod || terraform workspace new prod
             displayName: Select Terraform Workspace
 
           # Terraform Destroy (reads state from backend)
