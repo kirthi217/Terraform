@@ -12,7 +12,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "learning-rg"
+  name     = "learning-rg-1"
   location = "UK West"
 }
 
