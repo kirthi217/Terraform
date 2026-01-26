@@ -8,6 +8,7 @@ stages:
         pool:
          vmImage: ubuntu-latest
         steps:
+        - checkout: self 
         - task: TerraformInstaller@1
           displayName: Terraform Installer
           inputs:
