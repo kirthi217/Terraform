@@ -1,0 +1,67 @@
+9: Best Practices and Governance
+1.Terraform Best Practices for Code Organization
+   Well-organized code is easier to understand, reuse, and maintain.
+
+Best practices include:
+    - Using modules
+    - Keeping environments separate (dev, staging, prod)
+    - Naming conventions for resources and variables
+    - Avoiding hard-coded values
+Why it matters:
+    - Easier collaboration
+    - Reduced technical debt
+    - Faster onboarding for new team members
+2.Security Considerations and Managing Secrets
+   Infrastructure often requires sensitive data such as passwords and API keys.
+Key principles:
+    - Never store secrets in plain text
+    - Use secret managers (Vault, AWS Secrets Manager)
+    - Use environment variables
+Security must be built into infrastructure from day one.
+
+3.Infrastructure as Code Policies : Policies define what is allowed and what is not in infrastructure.
+Examples:
+    - No unencrypted storage
+    - No public IPs on production servers
+    - Mandatory tagging of resources
+Tools may encounter:
+    Sentinel
+    Open Policy Agent (OPA)
+4.Compliance and Governance Practices
+   Governance ensures infrastructure aligns with company rules and legal requirements.
+Covered concepts:
+    - Role-based access control (RBAC)
+    - Approval workflows
+    - Auditing and logging changes
+Module 10: Collaboration and Automation
+This module teaches how Terraform is used in real-world team environments, focusing on automation and collaboration.
+
+1.Integrating Terraform with CI/CD Pipelines
+   Terraform is often executed automatically through CI/CD pipelines.
+    - Running terraform plan and apply in pipelines
+    - Validating code before merging
+    - Automating deployments
+Common CI/CD tools:
+GitHub Actions
+GitLab CI
+Jenkins
+2. Using Terraform Cloud or Terraform Enterprise
+   Terraform Cloud and Enterprise help teams collaborate safely.
+   Key features:
+        Remote state management
+        Policy enforcement
+        Role-based access
+        Run history and auditing
+3.Implementing Automated Workflows and Pipelines
+      Automation ensures consistency and speed.
+Examples:
+   Auto-deploy on merge
+    Automatic rollback on failure
+    Environment promotion (dev → prod)
+4.Collaborating Effectively in Large Teams
+      Terraform enables collaboration across large teams.
+      Best practices:
+   Use version control (Git)
+    Code reviews
+    Shared modules
+    Clear ownership and documentation
